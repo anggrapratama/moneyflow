@@ -1,0 +1,397 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyFlow — Personal Finance Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-icon"><i class="fa-solid fa-wallet"></i></div>
+            <div class="brand-name">money<span>flow</span></div>
+        </div>
+
+        <div class="sidebar-label">MENU UTAMA</div>
+
+        <nav class="navigation">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                <i class="fa-solid fa-grid-2"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#transactions" class="nav-link" data-section="transactions">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Transaksi</span>
+            </a>
+            <a href="#savings" class="nav-link" data-section="savings">
+                <i class="fa-solid fa-piggy-bank"></i>
+                <span>Tabungan</span>
+            </a>
+            <a href="#emergency" class="nav-link" data-section="emergency">
+                <i class="fa-solid fa-shield-heart"></i>
+                <span>Dana Darurat</span>
+            </a>
+            <a href="#reports" class="nav-link" data-section="reports">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Laporan</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-label tools-label">PREFERENSI</div>
+        <nav class="navigation">
+            <button class="nav-link" id="notificationNav">
+                <i class="fa-regular fa-bell"></i>
+                <span>Notifikasi</span>
+                <span class="notification-count" id="notificationCount">0</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sync-card">
+                <div class="sync-top">
+                    <div class="sync-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <span class="sync-status">Live sync</span>
+                    <span class="sync-dot"></span>
+                </div>
+                <p>Data tersimpan otomatis</p>
+                <span class="sync-sub">Local storage · Perangkat ini</span>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-avatar">A</div>
+                <div class="profile-info">
+                    <strong>Personal Account</strong>
+                    <span>Pengelola keuangan</span>
+                </div>
+                <button class="icon-button" id="settingsBtn" title="Pengaturan">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="dashboard">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle icon-button" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="breadcrumb">
+                    <span>Pages</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <strong>Dashboard</strong>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="date-pill">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+                <!-- Tombol dark mode -->
+                <button class="icon-button theme-toggle" id="themeToggle" title="Ganti tema">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+                <button class="icon-button notification-button" id="notificationBtn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-indicator" id="notificationIndicator"></span>
+                </button>
+                <button class="avatar-button">A</button>
+            </div>
+        </header>
+
+        <!-- Dashboard Header -->
+        <section class="welcome-section">
+            <div>
+                <div class="eyebrow"><span class="eyebrow-dot"></span> FINANCIAL OVERVIEW</div>
+                <h1>Dashboard <span>Keuangan.</span></h1>
+                <p class="welcome-subtitle">Pantau kondisi keuangan dan capai tujuanmu lebih terencana.</p>
+            </div>
+            <button class="primary-button" id="addTransactionBtn">
+                <i class="fa-solid fa-plus"></i> Tambah Transaksi
+            </button>
+        </section>
+
+        <!-- Summary Cards -->
+        <section class="summary-grid">
+
+            <article class="summary-card balance-card">
+                <div class="card-top">
+                    <span class="card-label">Total Saldo</span>
+                    <span class="card-icon balance-icon"><i class="fa-solid fa-wallet"></i></span>
+                </div>
+                <h2 id="totalBalance">Rp 0</h2>
+                <div class="card-footer">
+                    <span class="balance-badge"><i class="fa-solid fa-chart-line"></i> Keuangan saat ini</span>
+                    <span class="card-caption">Seluruh akun</span>
+                </div>
+            </article>
+
+            <article class="summary-card">
+                <div class="card-top">
+                    <span class="card-label">Total Pemasukan</span>
+                    <span class="card-icon income-icon"><i class="fa-solid fa-arrow-down"></i></span>
+                </div>
+                <h2 id="totalIncome">Rp 0</h2>
+                <div class="card-footer">
+                    <span class="positive-label"><i class="fa-solid fa-circle-arrow-up"></i> Uang masuk</span>
+                    <span class="card-caption">Semua waktu</span>
+                </div>
+            </article>
+
+            <article class="summary-card">
+                <div class="card-top">
+                    <span class="card-label">Total Pengeluaran</span>
+                    <span class="card-icon expense-icon"><i class="fa-solid fa-arrow-up"></i></span>
+                </div>
+                <h2 id="totalExpense">Rp 0</h2>
+                <div class="card-footer">
+                    <span class="negative-label"><i class="fa-solid fa-circle-arrow-down"></i> Uang keluar</span>
+                    <span class="card-caption">Semua waktu</span>
+                </div>
+            </article>
+
+            <article class="summary-card">
+                <div class="card-top">
+                    <span class="card-label">Total Tabungan</span>
+                    <span class="card-icon saving-icon"><i class="fa-solid fa-piggy-bank"></i></span>
+                </div>
+                <h2 id="totalSavings">Rp 0</h2>
+                <div class="card-footer">
+                    <span class="saving-label"><i class="fa-solid fa-bullseye"></i> Dana tersimpan</span>
+                    <span class="card-caption">Target tabungan</span>
+                </div>
+            </article>
+        </section>
+
+        <!-- Charts -->
+        <section class="charts-grid">
+
+            <article class="panel cashflow-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Arus Kas</h3>
+                        <p>Ringkasan pemasukan dan pengeluaran</p>
+                    </div>
+                    <div class="chart-legend">
+                        <span><i class="legend-dot income-dot"></i> Pemasukan</span>
+                        <span><i class="legend-dot expense-dot"></i> Pengeluaran</span>
+                    </div>
+                </div>
+                <div class="chart-container cashflow-chart-container">
+                    <canvas id="cashflowChart"></canvas>
+                </div>
+            </article>
+
+            <article class="panel expense-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Komposisi Pengeluaran</h3>
+                        <p>Distribusi berdasarkan kategori</p>
+                    </div>
+                </div>
+                <div class="donut-container">
+                    <canvas id="expenseChart"></canvas>
+                    <div class="donut-center">
+                        <span>Total pengeluaran</span>
+                        <strong id="donutTotal">Rp 0</strong>
+                    </div>
+                </div>
+                <div class="expense-legend" id="expenseLegend"></div>
+            </article>
+        </section>
+
+        <!-- Goals -->
+        <section class="goals-grid" id="savings">
+            <article class="panel goal-card">
+                <div class="goal-heading">
+                    <div class="goal-icon savings-goal-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                    <div>
+                        <h3>Tabungan</h3>
+                        <p>Target finansial kamu</p>
+                    </div>
+                    <button class="icon-button goal-menu" data-goal="savings" title="Atur tabungan"><i class="fa-solid fa-ellipsis"></i></button>
+                </div>
+                <div class="goal-amount-row">
+                    <div>
+                        <span class="goal-caption">Terkumpul</span>
+                        <h2 id="savingsAmount">Rp 0</h2>
+                    </div>
+                    <div class="goal-target">
+                        <span>Target</span>
+                        <strong id="savingsTarget">Rp 0</strong>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <span>Progress</span>
+                    <strong id="savingsPercentage">0%</strong>
+                </div>
+                <div class="progress-track"><div class="progress-fill savings-fill" id="savingsProgress"></div></div>
+                <div class="goal-footer">
+                    <span><i class="fa-solid fa-bullseye"></i> <span id="savingsRemaining">Rp 0 lagi</span></span>
+                    <button class="text-button" id="addSavingsBtn">+ Tambah dana</button>
+                </div>
+            </article>
+
+            <article class="panel goal-card" id="emergency">
+                <div class="goal-heading">
+                    <div class="goal-icon emergency-goal-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                    <div>
+                        <h3>Dana Darurat</h3>
+                        <p>Jaga keamanan finansial</p>
+                    </div>
+                    <button class="icon-button goal-menu" data-goal="emergency" title="Atur dana darurat"><i class="fa-solid fa-ellipsis"></i></button>
+                </div>
+                <div class="goal-amount-row">
+                    <div>
+                        <span class="goal-caption">Terkumpul</span>
+                        <h2 id="emergencyAmount">Rp 0</h2>
+                    </div>
+                    <div class="goal-target">
+                        <span>Target</span>
+                        <strong id="emergencyTarget">Rp 0</strong>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <span>Progress</span>
+                    <strong id="emergencyPercentage">0%</strong>
+                </div>
+                <div class="progress-track"><div class="progress-fill emergency-fill" id="emergencyProgress"></div></div>
+                <div class="goal-footer">
+                    <span><i class="fa-solid fa-shield"></i> <span id="emergencyRemaining">Rp 0 lagi</span></span>
+                    <button class="text-button" id="addEmergencyBtn">+ Tambah dana</button>
+                </div>
+            </article>
+        </section>
+
+        <!-- Transactions and notifications -->
+        <section class="bottom-grid" id="transactions">
+            <article class="panel transactions-panel">
+                <div class="panel-header transaction-header">
+                    <div>
+                        <h3>Transaksi Terbaru</h3>
+                        <p>Aktivitas keuangan kamu</p>
+                    </div>
+                    <button class="text-button" id="viewAllTransactions">Lihat semua <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="transaction-table-wrapper">
+                    <table class="transaction-table">
+                        <thead>
+                            <tr>
+                                <th>TRANSAKSI</th>
+                                <th>KATEGORI</th>
+                                <th>TANGGAL</th>
+                                <th>JUMLAH</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTableBody"></tbody>
+                    </table>
+                    <div class="empty-state" id="transactionEmpty">
+                        <div class="empty-icon"><i class="fa-solid fa-receipt"></i></div>
+                        <strong>Belum ada transaksi</strong>
+                        <p>Transaksi kamu akan muncul di sini.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Notification panel -->
+            <article class="panel notification-panel" id="notifications">
+                <div class="panel-header">
+                    <div>
+                        <h3>Aktivitas</h3>
+                        <p>Update terbaru keuangan kamu</p>
+                    </div>
+                    <button class="icon-button" id="clearNotifications" title="Bersihkan"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <div class="notification-list" id="notificationList"></div>
+                <div class="notification-empty" id="notificationEmpty">
+                    <i class="fa-regular fa-bell-slash"></i>
+                    <p>Belum ada notifikasi.</p>
+                </div>
+            </article>
+        </section>
+
+        <!-- Excel Sync -->
+        <section class="panel excel-panel" id="reports">
+            <div class="panel-header excel-header">
+                <div class="excel-title">
+                    <div class="excel-icon"><i class="fa-solid fa-file-excel"></i></div>
+                    <div>
+                        <h3>Excel Auto-Sync</h3>
+                        <p>Rekapitulasi keuangan secara otomatis</p>
+                    </div>
+                </div>
+                <div class="excel-actions">
+                    <div class="excel-sync-badge"><span class="sync-dot"></span> <span id="excelSyncStatus">Tersinkron</span></div>
+                    <button class="outline-button" id="exportCsvBtn"><i class="fa-solid fa-download"></i> Ekspor ke Excel (.CSV)</button>
+                </div>
+            </div>
+
+            <div class="spreadsheet-wrap">
+                <table class="spreadsheet">
+                    <thead>
+                        <tr>
+                            <th class="row-number">#</th>
+                            <th>Periode</th>
+                            <th>Total Pemasukan</th>
+                            <th>Total Pengeluaran</th>
+                            <th>Saldo Bersih</th>
+                            <th>Jumlah Transaksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="excelTableBody"></tbody>
+                </table>
+            </div>
+            <div class="excel-footer">
+                <span><i class="fa-solid fa-circle-check"></i> Data diperbarui otomatis</span>
+                <span id="lastSyncTime">Terakhir diperbarui —</span>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <span>© 2026 MoneyFlow. Personal finance, made simple.</span>
+            <span>Designed for your financial growth <i class="fa-solid fa-heart"></i></span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div>
+                <span class="modal-eyebrow">MONEYFLOW</span>
+                <h2 id="modalTitle">Tambah Transaksi</h2>
+            </div>
+            <button class="icon-button modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
