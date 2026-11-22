@@ -12,6 +12,12 @@ MoneyFlow is a personal finance tracking website that provides a centralized das
 
 Built with a modern, responsive interface, MoneyFlow offers both **Light Mode and Dark Mode** to create a comfortable user experience in different lighting environments.
 
+### ☀️ Light Mode
+![MoneyFlow Light Mode](screenshots/light-mode.png)
+
+### 🌙 Dark Mode
+![MoneyFlow Dark Mode](screenshots/dark-mode.png)
+
 ---
 
 ## ✨ Key Features
